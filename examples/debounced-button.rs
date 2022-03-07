@@ -1,29 +1,25 @@
-//! Blinks the LED on a Pico board
-//!
-//! This will blink an LED attached to GP25, which is the pin the Pico uses for the on-board LED.
+//! Polls and debounces a button press
 #![no_std]
 #![no_main]
 
 use cortex_m_rt::entry;
+use debounced_button::{Button, ButtonConfig, ButtonState};
 use defmt::*;
 use defmt_rtt as _;
-use embedded_hal::digital::v2::OutputPin;
 use embedded_time::fixed_point::FixedPoint;
 use panic_probe as _;
 
-// Provide an alias for our BSP so we can switch targets quickly.
-// Uncomment the BSP you included in Cargo.toml, the rest of the code does not need to change.
-use rp_pico as bsp;
-// use sparkfun_pro_micro_rp2040 as bsp;
+use rp_pico;
 
-use bsp::hal::{
+use rp_pico::hal::{
     clocks::{init_clocks_and_plls, Clock},
     pac,
     sio::Sio,
     watchdog::Watchdog,
 };
 
-#[entry]
+// For rust-analyzer we disable the #[entry] macro
+#[cfg_attr(not(test), entry)]
 fn main() -> ! {
     info!("Program start");
     let mut pac = pac::Peripherals::take().unwrap();
@@ -47,23 +43,29 @@ fn main() -> ! {
 
     let mut delay = cortex_m::delay::Delay::new(core.SYST, clocks.system_clock.freq().integer());
 
-    let pins = bsp::Pins::new(
+    let pins = rp_pico::Pins::new(
         pac.IO_BANK0,
         pac.PADS_BANK0,
         sio.gpio_bank0,
         &mut pac.RESETS,
     );
 
-    let mut led_pin = pins.led.into_push_pull_output();
+    let btn_pin = pins.gpio0.into_pull_up_input();
+    let config = ButtonConfig::default();
+    let mut button = Button::new(btn_pin, 1_000, config);
 
     loop {
-        info!("on!");
-        led_pin.set_high().unwrap();
-        delay.delay_ms(500);
-        info!("off!");
-        led_pin.set_low().unwrap();
-        delay.delay_ms(500);
+        // Ideally this would be run in an interrupt
+        button.poll();
+        delay.delay_ms(1);
+        match button.read() {
+            Some(ButtonState::Press) => {
+                info!("Button pressed!");
+            }
+            Some(ButtonState::LongPress) => {
+                info!("Button pressed long");
+            }
+            None => {}
+        }
     }
 }
-
-// End of file

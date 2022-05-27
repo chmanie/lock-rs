@@ -50,22 +50,22 @@ fn main() -> ! {
         &mut pac.RESETS,
     );
 
-    let btn_pin = pins.gpio0.into_pull_up_input();
+    let btn_pin = pins.gpio17.into_pull_up_input();
     let config = ButtonConfig::default();
     let mut button = Button::new(btn_pin, 1_000, config);
 
     loop {
-        // Ideally this would be run in an interrupt
+        // Ideally this would be run in a timer interrupt
         button.poll();
         delay.delay_ms(1);
         match button.read() {
-            Some(ButtonState::Press) => {
+            ButtonState::Press => {
                 info!("Button pressed!");
             }
-            Some(ButtonState::LongPress) => {
+            ButtonState::LongPress => {
                 info!("Button pressed long");
             }
-            None => {}
+            _ => {}
         }
     }
 }

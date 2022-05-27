@@ -1,8 +1,8 @@
 [package]
-authors = ["the rp-rs team"]
+authors = ["Chris Maniewski"]
 edition = "2021"
 readme = "README.md"
-name = "rp2040-project-template"
+name = "driver-templates"
 version = "0.1.0"
 resolver = "2"
 
@@ -20,7 +20,7 @@ panic-probe = { version = "0.3.0", features = ["print-defmt"] }
 rp-pico = "0.2.0"
 
 [dev-dependencies]
-debounced-button = { path = "../debounced-button" }
+debounced-button = "0.2.0"
 
 # cargo build/run
 [profile.dev]

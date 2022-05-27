@@ -21,6 +21,7 @@ rp-pico = "0.2.0"
 
 [dev-dependencies]
 debounced-button = "0.2.0"
+ad5328 = "0.1.1"
 
 # cargo build/run
 [profile.dev]

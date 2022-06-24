@@ -23,6 +23,7 @@ rp-pico = "0.2.0"
 debounced-button = "0.2.0"
 ad5328 = "0.1.1"
 mii = "0.1.1"
+is31fl3218 = "0.1.0"
 
 # cargo build/run
 [profile.dev]

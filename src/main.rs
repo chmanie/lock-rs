@@ -23,4 +23,3 @@ async fn main(_spawner: Spawner) {
         Timer::after_secs(1).await;
     }
 }
-

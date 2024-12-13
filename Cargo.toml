@@ -11,11 +11,49 @@ cortex-m-rt = "0.7"
 defmt = "0.3"
 defmt-rtt = "0.4"
 panic-probe = { version = "0.3", features = ["print-defmt"] }
-embassy-executor = { version = "0.6", features = ["task-arena-size-32768", "arch-cortex-m", "executor-thread", "executor-interrupt", "defmt", "integrated-timers"] }
-embassy-sync = "0.6"
-embassy-time = { version = "0.3", features = ["defmt", "defmt-timestamp-uptime"] }
-embassy-rp = { version = "0.2", features = ["defmt", "unstable-pac", "time-driver", "critical-section-impl"] }
 embedded-hal = "1.0"
+
+embassy-embedded-hal = { version = "0.2", features = ["defmt"] }
+embassy-sync = { version = "0.6", features = ["defmt"] }
+embassy-executor = { version = "0.6", features = [
+  "task-arena-size-98304",
+  "arch-cortex-m",
+  "executor-thread",
+  "executor-interrupt",
+  "defmt",
+  "integrated-timers",
+] }
+embassy-time = { version = "0.3", features = [
+  "defmt",
+  "defmt-timestamp-uptime",
+] }
+embassy-usb = { version = "0.3", features = ["defmt", "max-interface-count-6"] }
+embassy-usb-logger = { version = "0.2" }
+embassy-rp = { version = "0.2", features = [
+  "defmt",
+  "unstable-pac",
+  "time-driver",
+  "critical-section-impl",
+  "rp2040",
+  "binary-info",
+] }
+embassy-futures = { version = "0.1" }
+pio-proc = "0.2.2"
+static_cell = "2.1.0"
+portable-atomic = { version = "1.7", features = ["critical-section"] }
+log = "0.4.22"
+pio = "0.2.1"
+
+
+[patch.crates-io]
+embassy-embedded-hal = { path = "../../rust/embassy/embassy-embedded-hal" }
+embassy-executor = { path = "../../rust/embassy/embassy-executor" }
+embassy-rp = { path = "../../rust/embassy/embassy-rp" }
+embassy-sync = { path = "../../rust/embassy/embassy-sync" }
+embassy-time = { path = "../../rust/embassy/embassy-time" }
+embassy-usb = { path = "../../rust/embassy/embassy-usb" }
+embassy-usb-driver = { path = "../../rust/embassy/embassy-usb-driver" }
+embassy-usb-logger = { path = "../../rust/embassy/embassy-usb-logger" }
 
 [dev-dependencies]
 
